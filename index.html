@@ -5,102 +5,25 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#173d25">
 <title>Caça-Palavras — Aventura dos Mundos</title>
-<style>
-*{box-sizing:border-box}
-:root{--wood:#8c4c1e;--gold:#ffd34e;--ink:#2b1b10}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#3f8a52,#102b1c 75%);font-family:"Trebuchet MS",Arial,sans-serif;color:#fff}
-button{font:inherit;cursor:pointer}
-.screen{min-height:100vh}
-.hidden{display:none!important}
-
-/* MENU */
-.home-screen{max-width:720px;margin:0 auto;padding:18px 14px 40px}
-.top-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
-.coin-pill{white-space:nowrap;border-radius:30px;padding:9px 8px 9px 16px;background:#0c2d3b;border:3px solid #d8b75c;font-size:20px;display:flex;align-items:center;gap:8px}
-.coin-pill .plus{border:2px solid #b7e5a0;border-radius:50%;width:30px;height:30px;background:linear-gradient(#56f34c,#00952c);color:#fff;font-weight:900;font-size:18px;line-height:1;padding:0}
-.icon-btn{border:3px solid #f2c16b;border-radius:50%;width:46px;height:46px;background:linear-gradient(#a7652c,#653414);color:#fff;font-size:22px;box-shadow:0 3px 0 #572d12}
-.title{text-align:center;margin:6px 0 4px;font-size:clamp(28px,7vw,44px);text-shadow:3px 4px #4b2811;line-height:1.05}
-.subtitle{text-align:center;margin:0 0 18px;color:#ffe08a;font-weight:700}
-.world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
-.world-card{position:relative;border:4px solid #f2c16b;border-radius:22px;padding:18px 14px;text-align:center;color:#fff;box-shadow:0 6px 0 #3c2618,0 12px 20px #0006;overflow:hidden;transition:transform .12s}
-.world-card:active{transform:scale(.97)}
-.world-card .emoji{font-size:54px;display:block;margin-bottom:4px}
-.world-card .wname{font-size:21px;font-weight:900;text-shadow:2px 2px #0006}
-.world-card .wprog{font-size:14px;font-weight:700;opacity:.95;margin-top:2px}
-.world-card .bar{height:8px;background:#0005;border-radius:8px;margin-top:8px;overflow:hidden}
-.world-card .bar i{display:block;height:100%;background:var(--gold);width:0}
-.world-card.locked{filter:grayscale(.85) brightness(.7)}
-.world-card.locked::after{content:"🔒";position:absolute;top:8px;right:12px;font-size:24px}
-.w-natureza{background:linear-gradient(160deg,#4cc05a,#1d7a35)}
-.w-lunar{background:linear-gradient(160deg,#6f6fd6,#262668)}
-.w-magico{background:linear-gradient(160deg,#c565d6,#6a2a86)}
-.w-mar{background:linear-gradient(160deg,#35b6e0,#0b4c82)}
-.w-ceu{background:linear-gradient(160deg,#8fd3ff,#3f86d4)}
-.total{margin-top:20px;text-align:center;font-weight:900;font-size:18px;text-shadow:1px 2px 2px #06431b}
-
-/* JOGO */
-.game-screen{padding:20px 14px 40px;background:linear-gradient(#174e2d,#0d2c1c)}
-.game-header{max-width:620px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.game-header h1{margin:2px 0;font-size:clamp(24px,5vw,34px);text-shadow:2px 3px #4b2811}
-.eyebrow{font-size:12px;letter-spacing:2px;color:#ffe08a;font-weight:900;margin:0}
-.wood-button,.primary-button,.secondary-button,.action-button{border:2px solid #f2c16b;border-radius:14px;padding:11px 15px;font-weight:900;box-shadow:0 4px 0 #572d12;color:#fff}
-.wood-button{background:linear-gradient(#a7652c,#653414)}
-.game-content{max-width:620px;margin:auto;background:linear-gradient(145deg,#fff1c8,#e4c17b);border:7px solid #75401c;border-radius:25px;padding:18px;color:var(--ink);box-shadow:0 10px 0 #3c2618,0 18px 30px #0005}
-.level-meta{display:flex;justify-content:space-between;font-weight:900;color:#603715}
-.progress-track{height:10px;border-radius:20px;background:#c9aa76;margin:10px 0 15px;overflow:hidden}
-.progress-track div{height:100%;width:0;background:linear-gradient(90deg,#6fe34b,#0c9a37);transition:width .2s}
-.instruction{text-align:center;font-weight:700;margin:10px 0 14px}
-.word-list{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-bottom:14px}
-.word-chip{padding:6px 9px;border-radius:9px;background:#f8df9c;border:2px solid #b57b35;font-size:13px;font-weight:900}
-.word-chip.found{background:#b6e8a2;color:#245522;text-decoration:line-through;border-color:#4c9d3d}
-.letter-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;max-width:500px;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none}
-.cell{aspect-ratio:1;border:1px solid #bd965c;border-radius:7px;background:linear-gradient(#fff9e9,#f2d9a6);display:grid;place-items:center;font-weight:900;font-size:clamp(13px,3.6vw,22px);color:#4b2b14;box-shadow:0 2px 0 #c29a5b;padding:0}
-.cell.hint{background:#9bd3ff;border-color:#2d79b8}
-.cell.found{background:#a8e18a;color:#174c23;border-color:#4b9a39}
-.cell.selected{background:#ffe15c;border-color:#d68a16;transform:scale(.94)}
-.game-actions{display:flex;gap:10px;margin-top:18px}
-.action-button{flex:1;background:linear-gradient(#3b8fd0,#15527f);font-size:15px}
-.skip-button{background:linear-gradient(#a66a34,#673612)}
-.action-button small{display:block;font-size:10px;font-weight:600;opacity:.9;margin-top:3px}
-.message{text-align:center;min-height:20px;font-weight:800;color:#275a25;margin:12px 0 0}
-
-/* FASE CONCLUÍDA */
-.complete-screen{display:grid;place-items:center;padding:20px;background:radial-gradient(circle,#3e8c48,#0c2a1a)}
-.complete-card{width:min(100%,420px);padding:35px 24px;text-align:center;border:7px solid #80491f;border-radius:28px;background:linear-gradient(#fff0c5,#dfb66c);color:#48270f;box-shadow:0 15px 0 #43240f}
-.trophy{font-size:65px}
-.complete-card h2{font-size:38px;margin:8px}
-.reward{font-size:24px;font-weight:900;color:#08732c;margin:22px}
-.primary-button{width:100%;background:linear-gradient(#4edc55,#087b2b);font-size:18px;margin:5px 0}
-.secondary-button{width:100%;background:linear-gradient(#a66a34,#673612);margin:5px 0}
-
-/* AVISOS */
-dialog{border:5px solid #8b4d20;border-radius:20px;max-width:min(90vw,390px);padding:0;background:#ffedc2;color:#45260f;box-shadow:0 20px 70px #0009}
-dialog::backdrop{background:#0009}
-.dialog-inner{padding:26px;text-align:center}
-.dialog-inner h2{margin-top:4px}
-.dialog-close{float:right;border:0;background:transparent;font-size:28px;color:#633}
-.dialog-inner .primary-button{margin-top:15px}
-
-@media(max-width:600px){
-  .game-content{padding:13px 9px;border-width:5px}
-  .game-actions{flex-direction:column}
-  .word-chip{font-size:12px}
-  .cell{border-radius:4px}
-}
-</style>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 <main id="app">
 
   <section id="homeScreen" class="screen home-screen" aria-label="Menu principal">
     <div class="top-bar">
-      <div class="coin-pill">🪙 <strong id="homeCoins">150</strong><button class="plus" id="shopButton" aria-label="Comprar moedas">+</button></div>
-      <button class="icon-btn" id="settingsButton" aria-label="Configurações">⚙️</button>
+      <header class="sign"><span class="lens">🔍</span><div><h1>Caça-Palavras</h1><p>Escolha um mundo para jogar!</p></div></header>
+      <div class="top-right">
+        <div class="coin-pill">🪙 <strong id="homeCoins">150</strong><button class="plus" id="shopButton" aria-label="Comprar moedas">+</button></div>
+        <button class="icon-btn" id="settingsButton" aria-label="Configurações">⚙️</button>
+      </div>
     </div>
-    <h1 class="title">Caça-Palavras</h1>
-    <p class="subtitle">Aventura dos Mundos</p>
     <div class="world-grid" id="worldGrid"></div>
-    <div class="total" id="homeProgress">0 / 630 fases</div>
+    <footer class="plank">
+      <div class="map">🗺️ Seu progresso:</div>
+      <div class="total" id="homeProgress">⭐ 0 / 630 fases</div>
+      <p class="tip">Cada mundo é uma nova aventura! Complete as fases e desbloqueie todos os mundos! 🍃</p>
+    </footer>
   </section>
 
   <section id="gameScreen" class="screen game-screen hidden">
@@ -187,7 +110,7 @@ function worldDone(key){ return Object.keys(state.completed).filter(k => k.start
 function updateHud(){
   $("homeCoins").textContent = state.coins;
   $("gameCoins").textContent = state.coins;
-  $("homeProgress").textContent = `${totalDone()} / ${TOTAL_PHASES} fases`;
+  $("homeProgress").textContent = `⭐ ${totalDone()} / ${TOTAL_PHASES} fases`;
   renderWorlds();
 }
 
@@ -197,11 +120,11 @@ function renderWorlds(){
   ORDER.forEach(key => {
     const w = WORLDS[key];
     const locked = totalDone() < w.start;
-    const done = worldDone(key);
     const b = document.createElement("button");
     b.className = `world-card w-${key}` + (locked ? " locked" : "");
-    b.innerHTML = `<span class="emoji">${w.emoji}</span><span class="wname">${w.name}</span>` +
-      `<div class="wprog">${done} / ${w.phases} fases</div><div class="bar"><i style="width:${done/w.phases*100}%"></i></div>`;
+    const cta = locked ? `<div class="cta">🔒 Desbloqueie no nível ${w.start + 1}</div>` : `<div class="cta">▶ Jogar</div>`;
+    const first = w.name.split(" ")[0] === "Fundo" ? "Fundo do Mar" : w.name;
+    b.innerHTML = `<span class="art">${w.emoji}</span><div class="plate"><small>Mundo</small><strong>${first}</strong></div><div class="pill">⭐ ${w.phases} fases</div>${cta}`;
     b.onclick = () => openWorld(key);
     grid.append(b);
   });
