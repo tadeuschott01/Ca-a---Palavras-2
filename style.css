@@ -5,38 +5,52 @@ button{font:inherit;cursor:pointer}
 .screen{min-height:100vh}
 .hidden{display:none!important}
 
-/* MENU */
-body{background:linear-gradient(#8fd3f4 0,#c9ecA8 22%,#4a9a3e 50%,#1b4d26 100%) fixed}
-.home-screen{max-width:1100px;margin:0 auto;padding:14px 12px 30px}
+/* MENU (desenhado com CSS + SVG) */
+body{background:#1b4d26}
+.home-screen{padding:0}
+.scene{position:relative;min-height:100vh;padding:14px 12px 24px;overflow:hidden;background:radial-gradient(ellipse 60% 25% at 20% 38%,#2f7d2f,transparent 70%),radial-gradient(ellipse 70% 30% at 85% 40%,#2a7a34,transparent 70%),linear-gradient(#5fb8ee 0,#a9dcf7 28%,#7cc46a 48%,#2f7d34 70%,#1b4d26 100%)}
+.cloud{position:absolute;width:200px;height:56px;background:#fff;border-radius:60px;opacity:.85;filter:blur(1px)}
+.cloud:before,.cloud:after{content:"";position:absolute;background:#fff;border-radius:50%}
+.cloud:before{width:80px;height:80px;left:30px;top:-38px}.cloud:after{width:60px;height:60px;left:100px;top:-26px}
+.c1{left:38%;top:16%}.c2{left:70%;top:5%;transform:scale(.7)}
+.wrap{position:relative;max-width:1100px;margin:0 auto}
 .top-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
-.sign{position:relative;display:flex;align-items:center;gap:12px;padding:12px 26px 12px 16px;background:linear-gradient(#a0602a,#6b3715);border:5px solid #5a2e10;border-radius:22px;box-shadow:0 6px 0 #3c2010,0 10px 18px #0005;outline:4px solid #4cae4c;outline-offset:-12px}
-.sign .lens{font-size:44px}
-.sign h1{margin:0;font-size:clamp(26px,6vw,46px);color:#ffd34e;-webkit-text-stroke:2px #7a3d0c;paint-order:stroke fill;text-shadow:0 4px 0 #5a2e10;line-height:1}
-.sign p{margin:6px 0 0;padding:4px 12px;background:#f7e6b8;color:#4b2b14;border-radius:8px;font-weight:900;font-size:clamp(12px,2.6vw,17px);border:2px solid #b57b35}
+.sign{position:relative;display:flex;align-items:center;gap:14px;padding:14px 30px 14px 18px;background:repeating-linear-gradient(90deg,#a8662d 0 38px,#9a5a26 38px 40px);border:5px solid #5a2e10;border-radius:22px;box-shadow:0 6px 0 #3c2010,0 12px 18px #0006}
+.sign:before,.sign:after{content:"🍃";position:absolute;font-size:34px}.sign:before{left:-12px;top:-14px}.sign:after{right:-8px;bottom:-14px;transform:rotate(120deg)}
+.lens{position:relative;flex:none;width:54px;height:54px;border-radius:50%;border:7px solid #e8a33a;background:radial-gradient(circle at 35% 30%,#fff,#7cc8f4 60%,#3c95d6);box-shadow:0 3px 0 #7a4a10}
+.lens:after{content:"";position:absolute;width:12px;height:30px;background:#b5651d;border-radius:6px;right:-14px;bottom:-26px;transform:rotate(-40deg)}
+.sign h1{margin:0;font-size:clamp(26px,6vw,48px);color:#ffd34e;-webkit-text-stroke:2px #7a3d0c;paint-order:stroke fill;text-shadow:0 4px 0 #5a2e10;line-height:1}
+.sign p{margin:8px 0 0;padding:4px 14px;background:#f7e6b8;color:#4b2b14;border-radius:8px;font-weight:900;font-size:clamp(12px,2.6vw,17px);border:2px solid #b57b35;transform:rotate(-1deg)}
 .top-right{display:flex;align-items:center;gap:10px}
-.coin-pill{white-space:nowrap;border-radius:30px;padding:8px 8px 8px 14px;background:linear-gradient(#1b3347,#0b1c2b);border:3px solid #34506a;font-size:24px;font-weight:900;display:flex;align-items:center;gap:10px;box-shadow:0 4px 8px #0006}
-.coin-pill .plus{border:3px solid #b7e5a0;border-radius:50%;width:36px;height:36px;background:linear-gradient(#56f34c,#00952c);color:#fff;font-weight:900;font-size:22px;line-height:1;padding:0}
-.icon-btn{border:3px solid #444;border-radius:50%;width:52px;height:52px;background:linear-gradient(#3a3f45,#1b1e22);color:#fff;font-size:26px;box-shadow:0 3px 0 #000a}
-.world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:26px 0 22px}
-.world-card{display:flex;flex-direction:column;align-items:center;min-height:360px;padding:0 10px 14px;border:5px solid #c98a3a;border-radius:90px 90px 24px 24px/120px 120px 24px 24px;color:#fff;overflow:hidden;box-shadow:0 6px 0 #3c2010,0 12px 22px #0007;transition:transform .12s;position:relative}
-.world-card:hover{transform:translateY(-4px)}
-.world-card .art{flex:1;display:grid;place-items:center;font-size:84px;width:100%;filter:drop-shadow(0 4px 4px #0006)}
-.plate{background:linear-gradient(#a0602a,#6b3715);border:3px solid #4a250d;border-radius:14px;padding:6px 16px;text-align:center;box-shadow:0 3px 0 #2d1608;margin-bottom:10px}
-.plate small{display:block;font-size:15px;font-weight:700}
-.plate strong{display:block;font-size:clamp(18px,3.4vw,26px);color:#ffe9a0;text-shadow:0 2px 0 #3c2010;line-height:1.05}
-.pill{width:100%;padding:7px;border-radius:30px;background:#0007;border:2px solid #fff4;font-weight:900;font-size:18px;text-align:center;margin-bottom:8px}
-.cta{width:100%;padding:9px 6px;border-radius:30px;font-weight:900;font-size:19px;text-align:center;background:linear-gradient(#4edc55,#087b2b);border:2px solid #b7e5a0;box-shadow:0 3px 0 #05501c}
-.world-card.locked{filter:saturate(.7) brightness(.8)}
-.world-card.locked .cta{background:linear-gradient(#444,#222);border-color:#777;box-shadow:0 3px 0 #000;font-size:14px;line-height:1.2}
-.w-natureza{background:linear-gradient(#7fd0ff 0,#4cc05a 45%,#14602a)}
-.w-lunar{background:linear-gradient(#3b2f8f,#1a1550 60%,#100c33);border-color:#7a52d6}
-.w-magico{background:linear-gradient(#b05fe0,#5a2a9a 55%,#2b1450);border-color:#a06ae0}
-.w-mar{background:linear-gradient(#3fc8f0,#1470b8 55%,#08305c);border-color:#4aa8d8}
-.w-ceu{background:linear-gradient(#cfeaff,#79b6f2 55%,#3f7fd4);border-color:#f0e0a0}
-.plank{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:16px;background:linear-gradient(#a0602a,#6b3715);border:5px solid #4a250d;border-radius:20px;box-shadow:0 6px 0 #2d1608}
+.coin-pill{white-space:nowrap;border-radius:30px;padding:8px 8px 8px 12px;background:linear-gradient(#1b3347,#0b1c2b);border:3px solid #34506a;font-size:26px;font-weight:900;display:flex;align-items:center;gap:10px;box-shadow:0 4px 8px #0006}
+.coin{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff3a0,#ffc61a 60%,#d98a00);border:3px solid #f0a800;display:grid;place-items:center;color:#b36b00;font-size:22px;font-weight:900}
+.coin-pill .plus{border:3px solid #b7e5a0;border-radius:50%;width:38px;height:38px;background:linear-gradient(#56f34c,#00952c);color:#fff;font-weight:900;font-size:24px;line-height:1;padding:0}
+.icon-btn{border:3px solid #555;border-radius:50%;width:54px;height:54px;background:linear-gradient(#3a3f45,#1b1e22);color:#fff;font-size:28px;box-shadow:0 3px 0 #000a}
+.branch{position:absolute;right:0;top:78px;width:260px;height:30px;background:linear-gradient(#8a5a2b,#5a3512);border-radius:20px 0 0 20px;transform:rotate(-4deg);box-shadow:0 4px 0 #3c2010}
+.branch:before{content:"🍃🍃";position:absolute;left:20px;top:-24px;font-size:28px}
+.squirrel{position:absolute;right:50px;top:-62px;font-size:70px;transform:scaleX(-1)}
+.world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:70px 0 20px}
+.world-card{display:flex;flex-direction:column;align-items:center;padding:6px 6px 12px;border:6px solid #c98a3a;border-radius:90px 90px 26px 26px/110px 110px 26px 26px;color:#fff;box-shadow:0 6px 0 #3c2010,0 14px 24px #0008;transition:transform .12s;overflow:hidden}
+.world-card:hover{transform:translateY(-5px)}
+.art{width:100%;height:250px;border-radius:84px 84px 8px 8px/100px 100px 8px 8px;overflow:hidden}
+.art svg{width:100%;height:100%;display:block}
+.plate{margin-top:-34px;position:relative;background:linear-gradient(#b06a2e,#6b3715);border:3px solid #4a250d;border-radius:16px;padding:5px 16px 7px;text-align:center;box-shadow:0 3px 0 #2d1608;margin-bottom:10px}
+.plate small{display:block;font-size:14px;font-weight:700}
+.plate strong{display:block;font-size:clamp(18px,3.2vw,26px);color:#ffe9a0;text-shadow:0 2px 0 #3c2010;line-height:1.05}
+.pill{width:92%;padding:6px;border-radius:30px;background:#0007;border:2px solid #fff5;font-weight:900;font-size:17px;text-align:center;margin-bottom:8px}
+.cta{width:92%;padding:9px 6px;border-radius:30px;font-weight:900;font-size:19px;text-align:center;background:linear-gradient(#4edc55,#087b2b);border:2px solid #b7e5a0;box-shadow:0 3px 0 #05501c}
+.world-card.locked .cta{background:linear-gradient(#3a3f49,#1d2027);border-color:#8a8f99;box-shadow:0 3px 0 #000;font-size:14px;line-height:1.2}
+.world-card.locked .art{filter:saturate(.8) brightness(.85)}
+.w-natureza{background:linear-gradient(#2f9a45,#0f5a26);border-color:#d19a3c}
+.w-lunar{background:linear-gradient(#2a2270,#120e3a);border-color:#b8782e}
+.w-magico{background:linear-gradient(#5b2a9a,#2b1450);border-color:#a06ae0}
+.w-mar{background:linear-gradient(#1c78c0,#08305c);border-color:#4aa8d8}
+.w-ceu{background:linear-gradient(#79b6f2,#3f7fd4);border-color:#f3e3a8}
+.plank{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:16px;background:repeating-linear-gradient(90deg,#a8662d 0 60px,#9a5a26 60px 63px);border:5px solid #4a250d;border-radius:20px;box-shadow:0 6px 0 #2d1608}
 .plank .map{background:#f7e6b8;color:#4b2b14;border:3px solid #b57b35;border-radius:12px;padding:10px 16px;font-weight:900}
-.plank .total{background:linear-gradient(#2fa845,#0b6a27);border:3px solid #b7e5a0;border-radius:30px;padding:10px 24px;font-weight:900;font-size:clamp(18px,4vw,30px);text-shadow:0 2px 0 #05501c}
-.plank .tip{flex:1;min-width:200px;margin:0;color:#ffe9a0;font-weight:700;font-size:15px}
+.plank .total{background:linear-gradient(#2fa845,#0b6a27);border:3px solid #b7e5a0;border-radius:30px;padding:10px 24px;font-weight:900;font-size:clamp(18px,4vw,30px);text-shadow:0 2px 0 #05501c;box-shadow:0 3px 0 #05501c}
+.plank .tip{flex:1;min-width:200px;margin:0;color:#ffe9a0;font-weight:700;font-size:15px;transform:rotate(-1deg)}
+@media(max-width:700px){.branch,.squirrel{display:none}.world-grid{margin-top:22px}.art{height:200px}}
 
 /* JOGO */
 .game-screen{padding:20px 14px 40px;background:linear-gradient(#174e2d,#0d2c1c)}
