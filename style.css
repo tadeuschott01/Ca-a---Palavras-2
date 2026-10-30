@@ -1,0 +1,89 @@
+*{box-sizing:border-box}
+:root{--wood:#8c4c1e;--gold:#ffd34e;--ink:#2b1b10}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at top,#3f8a52,#102b1c 75%);font-family:"Trebuchet MS",Arial,sans-serif;color:#fff}
+button{font:inherit;cursor:pointer}
+.screen{min-height:100vh}
+.hidden{display:none!important}
+
+/* MENU */
+body{background:linear-gradient(#8fd3f4 0,#c9ecA8 22%,#4a9a3e 50%,#1b4d26 100%) fixed}
+.home-screen{max-width:1100px;margin:0 auto;padding:14px 12px 30px}
+.top-bar{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.sign{position:relative;display:flex;align-items:center;gap:12px;padding:12px 26px 12px 16px;background:linear-gradient(#a0602a,#6b3715);border:5px solid #5a2e10;border-radius:22px;box-shadow:0 6px 0 #3c2010,0 10px 18px #0005;outline:4px solid #4cae4c;outline-offset:-12px}
+.sign .lens{font-size:44px}
+.sign h1{margin:0;font-size:clamp(26px,6vw,46px);color:#ffd34e;-webkit-text-stroke:2px #7a3d0c;paint-order:stroke fill;text-shadow:0 4px 0 #5a2e10;line-height:1}
+.sign p{margin:6px 0 0;padding:4px 12px;background:#f7e6b8;color:#4b2b14;border-radius:8px;font-weight:900;font-size:clamp(12px,2.6vw,17px);border:2px solid #b57b35}
+.top-right{display:flex;align-items:center;gap:10px}
+.coin-pill{white-space:nowrap;border-radius:30px;padding:8px 8px 8px 14px;background:linear-gradient(#1b3347,#0b1c2b);border:3px solid #34506a;font-size:24px;font-weight:900;display:flex;align-items:center;gap:10px;box-shadow:0 4px 8px #0006}
+.coin-pill .plus{border:3px solid #b7e5a0;border-radius:50%;width:36px;height:36px;background:linear-gradient(#56f34c,#00952c);color:#fff;font-weight:900;font-size:22px;line-height:1;padding:0}
+.icon-btn{border:3px solid #444;border-radius:50%;width:52px;height:52px;background:linear-gradient(#3a3f45,#1b1e22);color:#fff;font-size:26px;box-shadow:0 3px 0 #000a}
+.world-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:26px 0 22px}
+.world-card{display:flex;flex-direction:column;align-items:center;min-height:360px;padding:0 10px 14px;border:5px solid #c98a3a;border-radius:90px 90px 24px 24px/120px 120px 24px 24px;color:#fff;overflow:hidden;box-shadow:0 6px 0 #3c2010,0 12px 22px #0007;transition:transform .12s;position:relative}
+.world-card:hover{transform:translateY(-4px)}
+.world-card .art{flex:1;display:grid;place-items:center;font-size:84px;width:100%;filter:drop-shadow(0 4px 4px #0006)}
+.plate{background:linear-gradient(#a0602a,#6b3715);border:3px solid #4a250d;border-radius:14px;padding:6px 16px;text-align:center;box-shadow:0 3px 0 #2d1608;margin-bottom:10px}
+.plate small{display:block;font-size:15px;font-weight:700}
+.plate strong{display:block;font-size:clamp(18px,3.4vw,26px);color:#ffe9a0;text-shadow:0 2px 0 #3c2010;line-height:1.05}
+.pill{width:100%;padding:7px;border-radius:30px;background:#0007;border:2px solid #fff4;font-weight:900;font-size:18px;text-align:center;margin-bottom:8px}
+.cta{width:100%;padding:9px 6px;border-radius:30px;font-weight:900;font-size:19px;text-align:center;background:linear-gradient(#4edc55,#087b2b);border:2px solid #b7e5a0;box-shadow:0 3px 0 #05501c}
+.world-card.locked{filter:saturate(.7) brightness(.8)}
+.world-card.locked .cta{background:linear-gradient(#444,#222);border-color:#777;box-shadow:0 3px 0 #000;font-size:14px;line-height:1.2}
+.w-natureza{background:linear-gradient(#7fd0ff 0,#4cc05a 45%,#14602a)}
+.w-lunar{background:linear-gradient(#3b2f8f,#1a1550 60%,#100c33);border-color:#7a52d6}
+.w-magico{background:linear-gradient(#b05fe0,#5a2a9a 55%,#2b1450);border-color:#a06ae0}
+.w-mar{background:linear-gradient(#3fc8f0,#1470b8 55%,#08305c);border-color:#4aa8d8}
+.w-ceu{background:linear-gradient(#cfeaff,#79b6f2 55%,#3f7fd4);border-color:#f0e0a0}
+.plank{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:16px;background:linear-gradient(#a0602a,#6b3715);border:5px solid #4a250d;border-radius:20px;box-shadow:0 6px 0 #2d1608}
+.plank .map{background:#f7e6b8;color:#4b2b14;border:3px solid #b57b35;border-radius:12px;padding:10px 16px;font-weight:900}
+.plank .total{background:linear-gradient(#2fa845,#0b6a27);border:3px solid #b7e5a0;border-radius:30px;padding:10px 24px;font-weight:900;font-size:clamp(18px,4vw,30px);text-shadow:0 2px 0 #05501c}
+.plank .tip{flex:1;min-width:200px;margin:0;color:#ffe9a0;font-weight:700;font-size:15px}
+
+/* JOGO */
+.game-screen{padding:20px 14px 40px;background:linear-gradient(#174e2d,#0d2c1c)}
+.game-header{max-width:620px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.game-header h1{margin:2px 0;font-size:clamp(24px,5vw,34px);text-shadow:2px 3px #4b2811}
+.eyebrow{font-size:12px;letter-spacing:2px;color:#ffe08a;font-weight:900;margin:0}
+.wood-button,.primary-button,.secondary-button,.action-button{border:2px solid #f2c16b;border-radius:14px;padding:11px 15px;font-weight:900;box-shadow:0 4px 0 #572d12;color:#fff}
+.wood-button{background:linear-gradient(#a7652c,#653414)}
+.game-content{max-width:620px;margin:auto;background:linear-gradient(145deg,#fff1c8,#e4c17b);border:7px solid #75401c;border-radius:25px;padding:18px;color:var(--ink);box-shadow:0 10px 0 #3c2618,0 18px 30px #0005}
+.level-meta{display:flex;justify-content:space-between;font-weight:900;color:#603715}
+.progress-track{height:10px;border-radius:20px;background:#c9aa76;margin:10px 0 15px;overflow:hidden}
+.progress-track div{height:100%;width:0;background:linear-gradient(90deg,#6fe34b,#0c9a37);transition:width .2s}
+.instruction{text-align:center;font-weight:700;margin:10px 0 14px}
+.word-list{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-bottom:14px}
+.word-chip{padding:6px 9px;border-radius:9px;background:#f8df9c;border:2px solid #b57b35;font-size:13px;font-weight:900}
+.word-chip.found{background:#b6e8a2;color:#245522;text-decoration:line-through;border-color:#4c9d3d}
+.letter-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;max-width:500px;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none}
+.cell{aspect-ratio:1;border:1px solid #bd965c;border-radius:7px;background:linear-gradient(#fff9e9,#f2d9a6);display:grid;place-items:center;font-weight:900;font-size:clamp(13px,3.6vw,22px);color:#4b2b14;box-shadow:0 2px 0 #c29a5b;padding:0}
+.cell.hint{background:#9bd3ff;border-color:#2d79b8}
+.cell.found{background:#a8e18a;color:#174c23;border-color:#4b9a39}
+.cell.selected{background:#ffe15c;border-color:#d68a16;transform:scale(.94)}
+.game-actions{display:flex;gap:10px;margin-top:18px}
+.action-button{flex:1;background:linear-gradient(#3b8fd0,#15527f);font-size:15px}
+.skip-button{background:linear-gradient(#a66a34,#673612)}
+.action-button small{display:block;font-size:10px;font-weight:600;opacity:.9;margin-top:3px}
+.message{text-align:center;min-height:20px;font-weight:800;color:#275a25;margin:12px 0 0}
+
+/* FASE CONCLUÍDA */
+.complete-screen{display:grid;place-items:center;padding:20px;background:radial-gradient(circle,#3e8c48,#0c2a1a)}
+.complete-card{width:min(100%,420px);padding:35px 24px;text-align:center;border:7px solid #80491f;border-radius:28px;background:linear-gradient(#fff0c5,#dfb66c);color:#48270f;box-shadow:0 15px 0 #43240f}
+.trophy{font-size:65px}
+.complete-card h2{font-size:38px;margin:8px}
+.reward{font-size:24px;font-weight:900;color:#08732c;margin:22px}
+.primary-button{width:100%;background:linear-gradient(#4edc55,#087b2b);font-size:18px;margin:5px 0}
+.secondary-button{width:100%;background:linear-gradient(#a66a34,#673612);margin:5px 0}
+
+/* AVISOS */
+dialog{border:5px solid #8b4d20;border-radius:20px;max-width:min(90vw,390px);padding:0;background:#ffedc2;color:#45260f;box-shadow:0 20px 70px #0009}
+dialog::backdrop{background:#0009}
+.dialog-inner{padding:26px;text-align:center}
+.dialog-inner h2{margin-top:4px}
+.dialog-close{float:right;border:0;background:transparent;font-size:28px;color:#633}
+.dialog-inner .primary-button{margin-top:15px}
+
+@media(max-width:600px){
+  .game-content{padding:13px 9px;border-width:5px}
+  .game-actions{flex-direction:column}
+  .word-chip{font-size:12px}
+  .cell{border-radius:4px}
+}
