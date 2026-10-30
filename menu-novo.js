@@ -1,6 +1,6 @@
-
-/* MENU PREMIUM — Caça-Palavras
-   Mantém a lógica de moedas, progresso e desbloqueio do index.html. */
+/* MENU PREMIUM — CAÇA-PALAVRAS
+   Mantém moedas, progresso e desbloqueio dos mundos.
+*/
 
 (function () {
   "use strict";
@@ -10,11 +10,11 @@
 
   if (!home) return;
 
-  // Preserva as ações originais do jogo
+  // Guarda os eventos originais
   const oldShop = byId("shopButton")?.onclick || null;
   const oldSettings = byId("settingsButton")?.onclick || null;
 
-  // Criação do novo menu
+  // Cria o novo menu
   home.innerHTML = `
     <div class="mn-scene">
 
@@ -74,21 +74,16 @@
     </div>
   `;
 
-  // Restaura os eventos originais
-  if (byId("shopButton")) {
-    byId("shopButton").onclick = oldShop;
-  }
+  // Restaura as funções da loja e configurações
+  byId("shopButton").onclick = oldShop;
+  byId("settingsButton").onclick = oldSettings;
 
-  if (byId("settingsButton")) {
-    byId("settingsButton").onclick = oldSettings;
-  }
-
-  // Renderização dos mundos
+  // Renderiza os mundos
   window.renderWorlds = function renderWorlds() {
 
     const grid = byId("worldGrid");
 
-    if (!grid || (!window.WORLDS && typeof WORLDS === "undefined")) {
+    if (!grid || typeof WORLDS === "undefined") {
       return;
     }
 
@@ -142,26 +137,19 @@
         <span class="mn-go"></span>
       `;
 
-      card.querySelector(
-        ".mn-info strong"
-      ).textContent = world.name;
+      card.querySelector(".mn-info strong").textContent =
+        world.name;
 
-      card.querySelector(
-        ".mn-info small"
-      ).textContent = `${done}/${world.phases} fases`;
+      card.querySelector(".mn-info small").textContent =
+        `${done}/${world.phases} fases`;
 
-      card.querySelector(
-        ".mn-bar i"
-      ).style.width =
+      card.querySelector(".mn-bar i").style.width =
         `${Math.min(100, done / world.phases * 100)}%`;
 
-      card.querySelector(
-        ".mn-go"
-      ).textContent = locked
-        ? `🔒 Faltam ${missing}`
-        : "▶ Jogar";
+      card.querySelector(".mn-go").textContent =
+        locked ? `🔒 Faltam ${missing}` : "▶ Jogar";
 
-      card.addEventListener("click", () => {
+      card.addEventListener("click", function () {
         openWorld(key);
       });
 
@@ -169,23 +157,21 @@
 
     });
 
-    // Atualiza a barra de progresso geral
+    // Barra geral de progresso
     const totalBar = byId("homeTotalBar");
 
     if (totalBar) {
-
       totalBar.style.width =
         `${Math.min(100, totalDone() / TOTAL_PHASES * 100)}%`;
-
     }
 
   };
 
-  // Atualiza o painel do menu
+  // Atualiza moedas, progresso e mundos
   if (typeof updateHud === "function") {
     updateHud();
-  } else if (typeof renderWorlds === "function") {
-    renderWorlds();
+  } else {
+    window.renderWorlds();
   }
 
 })();
