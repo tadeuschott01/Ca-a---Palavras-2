@@ -289,6 +289,42 @@ dialog::backdrop{background:#0009}
 
 .dialog-inner .primary-button{margin-top:15px}
 
+/* ESCOLHA: MOEDAS OU VÍDEO */
+.choice-buttons{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.choice-buttons .primary-button,
+.choice-buttons .secondary-button{margin:0;font-size:17px}
+.choice-buttons .video-button{background:linear-gradient(#3b8fd0,#15527f)}
+.choice-buttons button:disabled,
+.dialog-inner .primary-button:disabled{
+  filter:grayscale(.85) brightness(.85);
+  opacity:.7;
+  box-shadow:none;
+}
+.video-box{
+  margin:16px 0 4px;
+  padding:26px 12px;
+  border-radius:14px;
+  background:linear-gradient(#1b2b3f,#0b1522);
+  color:#fff;
+  font-weight:900
+}
+.video-box .video-icon{font-size:40px}
+.video-box small{display:block;margin-top:6px;font-weight:600;opacity:.8}
+.video-track{
+  height:10px;
+  margin-top:14px;
+  overflow:hidden;
+  border-radius:10px;
+  background:#0006
+}
+.video-track i{
+  display:block;
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,#fff08a,#ffc61a);
+  transition:width 1s linear
+}
+
 @media(max-width:600px){
   .game-content{
     padding:13px 9px;
@@ -363,12 +399,12 @@ dialog::backdrop{background:#0009}
 
         <button class="action-button" id="hintButton">
           💡 Dica
-          <small>500 🪙</small>
+          <small>500 🪙 ou 🎬 vídeo</small>
         </button>
 
         <button class="action-button skip-button" id="skipButton">
           ⏭ Pular fase
-          <small>500 🪙</small>
+          <small>700 🪙 ou 🎬 vídeo</small>
         </button>
 
       </div>
@@ -426,6 +462,58 @@ dialog::backdrop{background:#0009}
 
     <button class="primary-button" id="dialogOk">
       Entendi
+    </button>
+
+  </div>
+</dialog>
+
+<!-- ESCOLHA: MOEDAS OU VÍDEO -->
+<dialog id="choiceDialog">
+  <div class="dialog-inner">
+
+    <button
+      class="dialog-close"
+      id="choiceClose"
+      aria-label="Fechar">
+      ×
+    </button>
+
+    <h2 id="choiceTitle">Dica</h2>
+
+    <p id="choiceText"></p>
+
+    <div class="choice-buttons">
+      <button class="primary-button" id="choicePay"></button>
+      <button class="primary-button video-button" id="choiceVideo">
+        🎬 Assistir vídeo
+      </button>
+    </div>
+
+  </div>
+</dialog>
+
+<!-- VÍDEO PREMIADO -->
+<dialog id="videoDialog">
+  <div class="dialog-inner">
+
+    <button
+      class="dialog-close"
+      id="videoClose"
+      aria-label="Fechar">
+      ×
+    </button>
+
+    <h2>Vídeo premiado</h2>
+
+    <div class="video-box">
+      <div class="video-icon">🎬</div>
+      <div id="videoText">Carregando...</div>
+      <div class="video-track"><i id="videoBar"></i></div>
+      <small>Anúncio de teste</small>
+    </div>
+
+    <button class="primary-button" id="videoReward" disabled>
+      Receber recompensa
     </button>
 
   </div>
@@ -1012,37 +1100,115 @@ function closeNotice(){
   $("noticeDialog").close();
 }
 
-function spendOrAd(action){
-  const name = action==="skip"
-    ? "pular esta fase"
-    : "receber uma dica";
+/* CUSTO DAS AJUDAS: moedas ou vídeo */
+const COST = {hint:500, skip:700};
+const VIDEO_SECONDS = 5;
 
-  if(state.coins>=500){
+let choiceAction = null;
+let videoTimer = null;
+let videoOnReward = null;
 
-    notice(
-      "Usar moedas?",
-      `Deseja gastar 500 moedas para ${name}?`,
-      "Pagar 500 moedas",
-      ()=>{
-        state.coins -= 500;
-        save();
-
-        if(action==="skip"){
-          skipLevel();
-        }else{
-          giveHint();
-        }
-      }
-    );
-
+function runAction(action){
+  if(action==="skip"){
+    skipLevel();
   }else{
-
-    notice(
-      "Moedas insuficientes",
-      "Você precisa de 500 moedas. A opção de anúncio recompensado ficará disponível quando uma plataforma de anúncios for conectada."
-    );
-
+    giveHint();
   }
+}
+
+function spendOrAd(action){
+  const cost = COST[action];
+  const enough = state.coins >= cost;
+
+  choiceAction = action;
+
+  $("choiceTitle").textContent =
+    action==="skip" ? "⏭ Pular fase" : "💡 Dica";
+
+  $("choiceText").textContent =
+    action==="skip"
+      ? "Como você quer pular esta fase?"
+      : "Como você quer receber uma dica?";
+
+  const pay = $("choicePay");
+
+  pay.textContent = enough
+    ? `🪙 Pagar ${cost} moedas`
+    : `🪙 ${cost} moedas (faltam ${cost - state.coins})`;
+
+  pay.disabled = !enough;
+
+  $("choiceDialog").showModal();
+}
+
+function payWithCoins(){
+  const action = choiceAction;
+  const cost = COST[action];
+
+  $("choiceDialog").close();
+
+  if(!action || state.coins < cost) return;
+
+  state.coins -= cost;
+  save();
+  updateHud();
+
+  runAction(action);
+}
+
+function watchVideo(){
+  const action = choiceAction;
+
+  $("choiceDialog").close();
+
+  if(!action) return;
+
+  /* Quando uma plataforma de anúncios for conectada, defina
+     window.mostrarVideoPremiado = function(aoGanhar){ ... }
+     e chame aoGanhar() só quando o vídeo terminar. */
+  const player = window.mostrarVideoPremiado || simulatedVideo;
+
+  player(() => runAction(action));
+}
+
+/* Vídeo de teste: contagem de 5 segundos antes de liberar a recompensa. */
+function simulatedVideo(onReward){
+  let left = VIDEO_SECONDS;
+
+  videoOnReward = onReward;
+
+  $("videoReward").disabled = true;
+  $("videoBar").style.transition = "none";
+  $("videoBar").style.width = "0%";
+  $("videoText").textContent = `Assistindo... ${left}s`;
+
+  $("videoDialog").showModal();
+
+  requestAnimationFrame(() => {
+    $("videoBar").style.transition = "width 1s linear";
+    $("videoBar").style.width = `${(1 - left / VIDEO_SECONDS) * 100}%`;
+  });
+
+  clearInterval(videoTimer);
+
+  videoTimer = setInterval(() => {
+    left--;
+
+    $("videoBar").style.width = `${(1 - left / VIDEO_SECONDS) * 100}%`;
+
+    if(left > 0){
+      $("videoText").textContent = `Assistindo... ${left}s`;
+    }else{
+      clearInterval(videoTimer);
+      $("videoText").textContent = "Vídeo concluído!";
+      $("videoReward").disabled = false;
+    }
+  }, 1000);
+}
+
+function stopVideo(){
+  clearInterval(videoTimer);
+  videoTimer = null;
 }
 
 function skipLevel(){
@@ -1156,6 +1322,24 @@ $("skipButton").onclick = ()=>{
 };
 
 $("closeDialog").onclick = closeNotice;
+
+$("choiceClose").onclick = ()=> $("choiceDialog").close();
+$("choicePay").onclick = payWithCoins;
+$("choiceVideo").onclick = watchVideo;
+
+$("videoClose").onclick = ()=> $("videoDialog").close();
+
+/* Fechar o vídeo antes do fim cancela a contagem e não dá recompensa. */
+$("videoDialog").addEventListener("close", stopVideo);
+
+$("videoReward").onclick = ()=>{
+  const done = videoOnReward;
+
+  videoOnReward = null;
+  $("videoDialog").close();
+
+  if(done) done();
+};
 
 $("dialogOk").onclick = ()=>{
   const a = dialogAction;
