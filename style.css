@@ -51,6 +51,7 @@
   opacity: .82;
   filter: blur(1px);
   z-index: 0;
+  pointer-events: none;
 }
 
 .mn-cloud:before,
@@ -86,6 +87,8 @@
 }
 
 .mn-top {
+  position: relative;
+  z-index: 5;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -117,11 +120,13 @@
   box-shadow: inset 0 0 0 2px #ffe98a;
 }
 
+/* CORRIGIDO: sombra sem desfoque, para o número não ficar borrado */
 .mn-coins strong {
   min-width: 38px;
   text-align: center;
   font-size: 23px;
-  text-shadow: 0 2px 3px #0008;
+  color: #fff;
+  text-shadow: 0 2px 0 #00000066;
 }
 
 .mn-plus {
@@ -136,6 +141,7 @@
   line-height: 1;
   padding: 0;
   box-shadow: 0 2px 0 #075b20;
+  touch-action: manipulation;
 }
 
 .mn-gear {
@@ -148,6 +154,7 @@
   box-shadow: 0 4px 0 #09243b,0 7px 14px #123c5c66;
   padding: 0;
   color: #fff;
+  touch-action: manipulation;
 }
 
 .mn-sign {
@@ -168,6 +175,7 @@
   position: absolute;
   font-size: 25px;
   top: -13px;
+  pointer-events: none;
 }
 
 .mn-sign:before {
@@ -438,4 +446,13 @@
 
 .game-content {
   box-shadow: 0 10px 0 #513018,0 18px 30px #0005;
+}
+
+.coin-pill {
+  padding: 6px 12px;
+  border-radius: 30px;
+  background: linear-gradient(180deg,#214e70,#071e35);
+  border: 2px solid #7dc7f4;
+  font-weight: 900;
+  white-space: nowrap;
 }
