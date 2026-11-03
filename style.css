@@ -2,7 +2,7 @@
 
 #homeScreen {
   padding: 0 !important;
-  background: #78bff0 !important;
+  background: #78bff0 url("principal.png") center top / cover no-repeat !important;
 }
 
 .mn-scene {
@@ -10,74 +10,12 @@
   min-height: 100vh;
   overflow: hidden;
   padding: max(14px,env(safe-area-inset-top)) 14px max(22px,env(safe-area-inset-bottom));
-  background:
-    radial-gradient(ellipse at 50% 17%,rgba(255,255,255,.65) 0 5%,transparent 22%),
-    radial-gradient(ellipse at 8% 36%,rgba(255,255,255,.9) 0 4%,transparent 18%),
-    radial-gradient(ellipse at 95% 48%,rgba(255,255,255,.8) 0 5%,transparent 20%),
-    linear-gradient(180deg,#39a8f4 0%,#9cdbfa 43%,#d9f0ff 75%,#83c7e7 100%);
+  background: transparent;
 }
 
-.mn-scene:before,
-.mn-scene:after {
-  content: "";
-  position: absolute;
-  pointer-events: none;
-  z-index: 0;
-  background: rgba(255,255,255,.88);
-  filter: blur(2px);
-  border-radius: 100px;
-}
-
-.mn-scene:before {
-  width: 190px;
-  height: 42px;
-  left: -55px;
-  top: 18%;
-}
-
-.mn-scene:after {
-  width: 220px;
-  height: 48px;
-  right: -75px;
-  top: 37%;
-}
-
-.mn-cloud {
-  position: absolute;
-  width: 140px;
-  height: 35px;
-  border-radius: 50px;
-  background: #fff;
-  opacity: .82;
-  filter: blur(1px);
-  z-index: 0;
-  pointer-events: none;
-}
-
-.mn-cloud:before,
-.mn-cloud:after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  background: #fff;
-}
-
-.mn-cloud:before {
-  width: 58px;
-  height: 58px;
-  left: 22px;
-  top: -28px;
-}
-
-.mn-cloud:after {
-  width: 48px;
-  height: 48px;
-  left: 76px;
-  top: -18px;
-}
-
-.mn-c1 { left: 5%; top: 28%; }
-.mn-c2 { right: 4%; top: 11%; transform: scale(.8); }
+/* Se a principal.png JÁ tiver o título desenhado, tire o comentário abaixo:
+.mn-sign { visibility: hidden; }
+*/
 
 .mn-wrap {
   position: relative;
@@ -254,10 +192,7 @@
   width: 82px;
   height: 82px;
   border-radius: 22px;
-  display: grid;
-  place-items: center;
-  font-size: 48px;
-  background: linear-gradient(145deg,#ffffff55,#ffffff12);
+  background: #234 center / cover no-repeat;
   border: 3px solid #f7d17a;
   box-shadow: 0 2px 0 #613b1c,inset 0 0 0 2px #ffffff55;
 }
@@ -418,7 +353,6 @@
   .mn-art {
     width: 68px;
     height: 68px;
-    font-size: 39px;
     border-radius: 18px;
   }
 
