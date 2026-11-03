@@ -290,3 +290,40 @@ body {
 .complete-card {
   background: rgba(255, 240, 197, .94) !important;
 }
+
+
+/* AJUSTE: quadro bege menor na tela de jogo */
+#gameScreen { padding: 16px 22px 32px; }
+
+#gameScreen .game-header {
+  max-width: 540px;
+  margin-bottom: 12px;
+}
+
+#gameScreen .game-content {
+  max-width: 540px;
+  padding: 14px;
+  border-width: 5px;
+  border-radius: 22px;
+  box-shadow: 0 7px 0 #3c2618, 0 14px 24px #0005;
+}
+
+#gameScreen .instruction { margin: 8px 0 10px; font-size: 14px; }
+#gameScreen .word-list { gap: 6px; margin-bottom: 10px; }
+#gameScreen .letter-grid { max-width: 460px; gap: 3px; }
+#gameScreen .game-actions { margin-top: 14px; }
+#gameScreen .action-button { min-height: 50px; }
+#gameScreen .message { margin-top: 8px; }
+
+@media (max-width: 600px) {
+  #gameScreen { padding: 14px 20px 28px; }
+
+  #gameScreen .game-content {
+    padding: 10px 8px;
+    border-width: 4px;
+    border-radius: 18px;
+  }
+
+  #gameScreen .game-actions { flex-direction: row; gap: 8px; }
+  #gameScreen .action-button { padding: 8px 6px; font-size: 14px; }
+}
