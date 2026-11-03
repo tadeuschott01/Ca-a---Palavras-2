@@ -4,65 +4,297 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#78bff0">
+
 <title>Caça-Palavras — Aventura dos Mundos</title>
+
 <link rel="stylesheet" href="style.css">
 
 <style>
 *{box-sizing:border-box}
 :root{--wood:#8c4c1e;--gold:#ffd34e;--ink:#2b1b10}
-body{margin:0;min-height:100vh;background:#1b4d26;font-family:"Trebuchet MS",Arial,sans-serif;color:#fff}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:radial-gradient(circle at top,#3f8a52,#102b1c 75%);
+  font-family:"Trebuchet MS",Arial,sans-serif;
+  color:#fff
+}
+
 button{font:inherit;cursor:pointer}
 .screen{min-height:100vh}
 .hidden{display:none!important}
 
 /* MENU */
-.home-screen{display:grid;place-items:center;padding:8px}
+body{background:#1b4d26}
+
+.home-screen{
+  display:grid;
+  place-items:center;
+  padding:8px
+}
 
 /* JOGO */
-.game-screen{padding:20px 14px 40px;background:linear-gradient(#174e2d,#0d2c1c)}
-.game-header{max-width:620px;margin:0 auto 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-.game-header h1{margin:2px 0;font-size:clamp(24px,5vw,34px);text-shadow:2px 3px #4b2811}
-.eyebrow{font-size:12px;letter-spacing:2px;color:#ffe08a;font-weight:900;margin:0}
-.wood-button,.primary-button,.secondary-button,.action-button{border:2px solid #f2c16b;border-radius:14px;padding:11px 15px;font-weight:900;box-shadow:0 4px 0 #572d12;color:#fff}
-.wood-button{background:linear-gradient(#a7652c,#653414)}
-.game-content{max-width:620px;margin:auto;background:linear-gradient(145deg,#fff1c8,#e4c17b);border:7px solid #75401c;border-radius:25px;padding:18px;color:var(--ink);box-shadow:0 10px 0 #3c2618,0 18px 30px #0005}
-.level-meta{display:flex;justify-content:space-between;font-weight:900;color:#603715}
-.progress-track{height:10px;border-radius:20px;background:#c9aa76;margin:10px 0 15px;overflow:hidden}
-.progress-track div{height:100%;width:0;background:linear-gradient(90deg,#6fe34b,#0c9a37);transition:width .2s}
-.instruction{text-align:center;font-weight:700;margin:10px 0 14px}
-.word-list{display:flex;justify-content:center;gap:7px;flex-wrap:wrap;margin-bottom:14px}
-.word-chip{padding:6px 9px;border-radius:9px;background:#f8df9c;border:2px solid #b57b35;font-size:13px;font-weight:900}
-.word-chip.found{background:#b6e8a2;color:#245522;text-decoration:line-through;border-color:#4c9d3d}
-.letter-grid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;max-width:500px;margin:0 auto;touch-action:none;user-select:none;-webkit-user-select:none}
-.cell{aspect-ratio:1;border:1px solid #bd965c;border-radius:7px;background:linear-gradient(#fff9e9,#f2d9a6);display:grid;place-items:center;font-weight:900;font-size:clamp(13px,3.6vw,22px);color:#4b2b14;box-shadow:0 2px 0 #c29a5b;padding:0}
-.cell.hint{background:#9bd3ff;border-color:#2d79b8}
-.cell.found{background:#a8e18a;color:#174c23;border-color:#4b9a39}
-.cell.selected{background:#ffe15c;border-color:#d68a16;transform:scale(.94)}
-.game-actions{display:flex;gap:10px;margin-top:18px}
-.action-button{flex:1;background:linear-gradient(#3b8fd0,#15527f);font-size:15px}
-.skip-button{background:linear-gradient(#a66a34,#673612)}
-.action-button small{display:block;font-size:10px;font-weight:600;opacity:.9;margin-top:3px}
-.message{text-align:center;min-height:20px;font-weight:800;color:#275a25;margin:12px 0 0}
+.game-screen{
+  padding:20px 14px 40px;
+  background:linear-gradient(#174e2d,#0d2c1c)
+}
+
+.game-header{
+  max-width:620px;
+  margin:0 auto 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+
+.game-header h1{
+  margin:2px 0;
+  font-size:clamp(24px,5vw,34px);
+  text-shadow:2px 3px #4b2811
+}
+
+.eyebrow{
+  font-size:12px;
+  letter-spacing:2px;
+  color:#ffe08a;
+  font-weight:900;
+  margin:0
+}
+
+.wood-button,.primary-button,.secondary-button,.action-button{
+  border:2px solid #f2c16b;
+  border-radius:14px;
+  padding:11px 15px;
+  font-weight:900;
+  box-shadow:0 4px 0 #572d12;
+  color:#fff
+}
+
+.wood-button{
+  background:linear-gradient(#a7652c,#653414)
+}
+
+.game-content{
+  max-width:620px;
+  margin:auto;
+  background:linear-gradient(145deg,#fff1c8,#e4c17b);
+  border:7px solid #75401c;
+  border-radius:25px;
+  padding:18px;
+  color:var(--ink);
+  box-shadow:0 10px 0 #3c2618,0 18px 30px #0005
+}
+
+.level-meta{
+  display:flex;
+  justify-content:space-between;
+  font-weight:900;
+  color:#603715
+}
+
+.progress-track{
+  height:10px;
+  border-radius:20px;
+  background:#c9aa76;
+  margin:10px 0 15px;
+  overflow:hidden
+}
+
+.progress-track div{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,#6fe34b,#0c9a37);
+  transition:width .2s
+}
+
+.instruction{
+  text-align:center;
+  font-weight:700;
+  margin:10px 0 14px
+}
+
+.word-list{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  flex-wrap:wrap;
+  margin-bottom:14px
+}
+
+.word-chip{
+  padding:6px 9px;
+  border-radius:9px;
+  background:#f8df9c;
+  border:2px solid #b57b35;
+  font-size:13px;
+  font-weight:900
+}
+
+.word-chip.found{
+  background:#b6e8a2;
+  color:#245522;
+  text-decoration:line-through;
+  border-color:#4c9d3d
+}
+
+.letter-grid{
+  display:grid;
+  grid-template-columns:repeat(10,minmax(0,1fr));
+  gap:4px;
+  max-width:500px;
+  margin:0 auto;
+  touch-action:none;
+  user-select:none;
+  -webkit-user-select:none
+}
+
+.cell{
+  aspect-ratio:1;
+  border:1px solid #bd965c;
+  border-radius:7px;
+  background:linear-gradient(#fff9e9,#f2d9a6);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  font-size:clamp(13px,3.6vw,22px);
+  color:#4b2b14;
+  box-shadow:0 2px 0 #c29a5b;
+  padding:0
+}
+
+.cell.hint{
+  background:#9bd3ff;
+  border-color:#2d79b8
+}
+
+.cell.found{
+  background:#a8e18a;
+  color:#174c23;
+  border-color:#4b9a39
+}
+
+.cell.selected{
+  background:#ffe15c;
+  border-color:#d68a16;
+  transform:scale(.94)
+}
+
+.game-actions{
+  display:flex;
+  gap:10px;
+  margin-top:18px
+}
+
+.action-button{
+  flex:1;
+  background:linear-gradient(#3b8fd0,#15527f);
+  font-size:15px
+}
+
+.skip-button{
+  background:linear-gradient(#a66a34,#673612)
+}
+
+.action-button small{
+  display:block;
+  font-size:10px;
+  font-weight:600;
+  opacity:.9;
+  margin-top:3px
+}
+
+.message{
+  text-align:center;
+  min-height:20px;
+  font-weight:800;
+  color:#275a25;
+  margin:12px 0 0
+}
 
 /* FASE CONCLUÍDA */
-.complete-screen{display:grid;place-items:center;padding:20px;background:radial-gradient(circle,#3e8c48,#0c2a1a)}
-.complete-card{width:min(100%,420px);padding:35px 24px;text-align:center;border:7px solid #80491f;border-radius:28px;background:linear-gradient(#fff0c5,#dfb66c);color:#48270f;box-shadow:0 15px 0 #43240f}
+.complete-screen{
+  display:grid;
+  place-items:center;
+  padding:20px;
+  background:radial-gradient(circle,#3e8c48,#0c2a1a)
+}
+
+.complete-card{
+  width:min(100%,420px);
+  padding:35px 24px;
+  text-align:center;
+  border:7px solid #80491f;
+  border-radius:28px;
+  background:linear-gradient(#fff0c5,#dfb66c);
+  color:#48270f;
+  box-shadow:0 15px 0 #43240f
+}
+
 .trophy{font-size:65px}
-.complete-card h2{font-size:38px;margin:8px}
-.reward{font-size:24px;font-weight:900;color:#08732c;margin:22px}
-.primary-button{width:100%;background:linear-gradient(#4edc55,#087b2b);font-size:18px;margin:5px 0}
-.secondary-button{width:100%;background:linear-gradient(#a66a34,#673612);margin:5px 0}
+
+.complete-card h2{
+  font-size:38px;
+  margin:8px
+}
+
+.reward{
+  font-size:24px;
+  font-weight:900;
+  color:#08732c;
+  margin:22px
+}
+
+.primary-button{
+  width:100%;
+  background:linear-gradient(#4edc55,#087b2b);
+  font-size:18px;
+  margin:5px 0
+}
+
+.secondary-button{
+  width:100%;
+  background:linear-gradient(#a66a34,#673612);
+  margin:5px 0
+}
 
 /* AVISOS */
-dialog{border:5px solid #8b4d20;border-radius:20px;max-width:min(90vw,390px);padding:0;background:#ffedc2;color:#45260f;box-shadow:0 20px 70px #0009}
+dialog{
+  border:5px solid #8b4d20;
+  border-radius:20px;
+  max-width:min(90vw,390px);
+  padding:0;
+  background:#ffedc2;
+  color:#45260f;
+  box-shadow:0 20px 70px #0009
+}
+
 dialog::backdrop{background:#0009}
-.dialog-inner{padding:26px;text-align:center}
+
+.dialog-inner{
+  padding:26px;
+  text-align:center
+}
+
 .dialog-inner h2{margin-top:4px}
-.dialog-close{float:right;border:0;background:transparent;font-size:28px;color:#633}
+
+.dialog-close{
+  float:right;
+  border:0;
+  background:transparent;
+  font-size:28px;
+  color:#633
+}
+
 .dialog-inner .primary-button{margin-top:15px}
 
 @media(max-width:600px){
-  .game-content{padding:13px 9px;border-width:5px}
+  .game-content{
+    padding:13px 9px;
+    border-width:5px
+  }
+
   .game-actions{flex-direction:column}
   .word-chip{font-size:12px}
   .cell{border-radius:4px}
@@ -74,54 +306,103 @@ dialog::backdrop{background:#0009}
 
 <main id="app">
 
-  <!-- MENU PRINCIPAL (montado pelo menu-novo.js) -->
-  <section id="homeScreen" class="screen home-screen" aria-label="Menu principal"></section>
+  <!-- MENU PRINCIPAL (preenchido pelo menu-novo.js) -->
+  <section
+    id="homeScreen"
+    class="screen home-screen"
+    aria-label="Menu principal">
+  </section>
 
   <!-- TELA DO JOGO -->
   <section id="gameScreen" class="screen game-screen hidden">
 
     <header class="game-header">
-      <button class="wood-button" id="backButton">← Mundos</button>
+
+      <button class="wood-button" id="backButton">
+        ← Mundos
+      </button>
+
       <div>
-        <p class="eyebrow" id="worldEyebrow">MUNDO NATUREZA</p>
+        <p class="eyebrow" id="worldEyebrow">
+          MUNDO NATUREZA
+        </p>
         <h1 id="levelTitle">Fase 1</h1>
       </div>
-      <div class="coin-pill">🪙 <strong id="gameCoins">150</strong></div>
+
+      <div class="coin-pill">
+        🪙 <strong id="gameCoins">150</strong>
+      </div>
+
     </header>
 
     <div class="game-content">
+
       <div class="level-meta">
         <span id="levelCounter">Fase 1 de 30</span>
         <span id="foundCounter">0/5 palavras</span>
       </div>
 
-      <div class="progress-track"><div id="levelProgress"></div></div>
+      <div class="progress-track">
+        <div id="levelProgress"></div>
+      </div>
 
-      <p class="instruction">Encontre as palavras escondidas. Arraste o dedo sobre as letras em linha reta!</p>
+      <p class="instruction">
+        Encontre as palavras escondidas.
+        Arraste o dedo sobre as letras em linha reta!
+      </p>
 
       <div id="wordList" class="word-list"></div>
 
-      <div id="letterGrid" class="letter-grid" aria-label="Tabuleiro de caça-palavras"></div>
+      <div
+        id="letterGrid"
+        class="letter-grid"
+        aria-label="Tabuleiro de caça-palavras">
+      </div>
 
       <div class="game-actions">
-        <button class="action-button" id="hintButton">💡 Dica<small>500 🪙</small></button>
-        <button class="action-button skip-button" id="skipButton">⏭ Pular fase<small>500 🪙</small></button>
+
+        <button class="action-button" id="hintButton">
+          💡 Dica
+          <small>500 🪙</small>
+        </button>
+
+        <button class="action-button skip-button" id="skipButton">
+          ⏭ Pular fase
+          <small>500 🪙</small>
+        </button>
+
       </div>
 
       <p id="message" class="message" role="status"></p>
+
     </div>
   </section>
 
   <!-- FASE CONCLUÍDA -->
   <section id="completeScreen" class="screen complete-screen hidden">
+
     <div class="complete-card">
+
       <div class="trophy">🏆</div>
-      <p class="eyebrow" style="color:#8c4c1e">FASE CONCLUÍDA!</p>
+
+      <p class="eyebrow" style="color:#8c4c1e">
+        FASE CONCLUÍDA!
+      </p>
+
       <h2>Muito bem!</h2>
+
       <p>Você encontrou todas as palavras.</p>
+
       <div class="reward">🪙 +50 moedas</div>
-      <button class="primary-button" id="nextButton">Próxima fase</button>
-      <button class="secondary-button" id="completeHomeButton">Voltar aos mundos</button>
+
+      <button class="primary-button" id="nextButton">
+        Próxima fase
+      </button>
+
+      <button class="secondary-button" id="completeHomeButton">
+        Voltar aos mundos
+      </button>
+
     </div>
   </section>
 
@@ -129,16 +410,31 @@ dialog::backdrop{background:#0009}
 
 <!-- DIÁLOGOS -->
 <dialog id="noticeDialog">
+
   <div class="dialog-inner">
-    <button class="dialog-close" id="closeDialog" aria-label="Fechar">×</button>
+
+    <button
+      class="dialog-close"
+      id="closeDialog"
+      aria-label="Fechar">
+      ×
+    </button>
+
     <h2 id="dialogTitle">Aviso</h2>
+
     <p id="dialogText"></p>
-    <button class="primary-button" id="dialogOk">Entendi</button>
+
+    <button class="primary-button" id="dialogOk">
+      Entendi
+    </button>
+
   </div>
 </dialog>
 
 <script>
-const toList = s => s.split(",").map(x => x.trim().toUpperCase().replaceAll(" ", ""));
+const toList = s => s.split(",").map(x =>
+  x.trim().toUpperCase().replaceAll(" ", "")
+);
 
 const WORLDS = {
 
@@ -194,13 +490,22 @@ const TOTAL_PHASES = 630;
 const STORAGE = "cacaPalavrasSaveV2";
 const N = 10;
 
-const DIRS = [[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[1,-1],[-1,-1]];
+const DIRS = [
+  [0,1],[1,0],[1,1],[-1,1],
+  [0,-1],[-1,0],[1,-1],[-1,-1]
+];
 
 const $ = id => document.getElementById(id);
 
 const defaultState = () => ({
   coins:150,
-  levels:{natureza:1,lunar:1,magico:1,mar:1,ceu:1},
+  levels:{
+    natureza:1,
+    lunar:1,
+    magico:1,
+    mar:1,
+    ceu:1
+  },
   completed:{},
   used:{}
 });
@@ -212,6 +517,7 @@ function loadState(){
       return Object.assign(defaultState(),s);
     }
   }catch(e){}
+
   return defaultState();
 }
 
@@ -231,6 +537,7 @@ function save(){
   try{
     localStorage.setItem(STORAGE,JSON.stringify(state));
   }catch(e){}
+
   updateHud();
 }
 
@@ -244,21 +551,70 @@ function worldDone(key){
   ).length;
 }
 
+/* CORRIGIDO: não quebra se o menu ainda não foi criado */
 function updateHud(){
-  const hc = $("homeCoins"), gc = $("gameCoins"), hp = $("homeProgress");
-  if(hc) hc.textContent = state.coins;
-  if(gc) gc.textContent = state.coins;
-  if(hp) hp.textContent = `${totalDone()}/${TOTAL_PHASES} fases`;
+  const homeCoins = $("homeCoins");
+  const gameCoins = $("gameCoins");
+  const homeProgress = $("homeProgress");
+
+  if(homeCoins) homeCoins.textContent = state.coins;
+  if(gameCoins) gameCoins.textContent = state.coins;
+
+  if(homeProgress){
+    homeProgress.textContent =
+      `${totalDone()}/${TOTAL_PHASES} fases`;
+  }
+
   renderWorlds();
 }
 
-/* Os cartões dos mundos são desenhados pelo menu-novo.js */
-function renderWorlds(){}
+/* (o menu-novo.js substitui esta função pela versão nova) */
+function renderWorlds(){
+  const grid = $("worldGrid");
+  if(!grid) return;
+
+  grid.innerHTML = "";
+
+  ORDER.forEach(key => {
+    const w = WORLDS[key];
+    const locked = totalDone() < w.start;
+
+    const b = document.createElement("button");
+
+    b.className = `mn-card w-${key}` + (locked ? " locked" : "");
+    b.type = "button";
+
+    b.onclick = () => openWorld(key);
+
+    b.innerHTML = `
+      <div class="mn-art">${w.emoji}</div>
+      <div class="mn-info">
+        <strong>${w.name}</strong>
+        <small>${worldDone(key)}/${w.phases} fases</small>
+        <div class="mn-bar"><i></i></div>
+      </div>
+      <span class="mn-go">${locked ? "🔒 Bloqueado" : "▶ Jogar"}</span>
+    `;
+
+    b.querySelector(".mn-bar i").style.width =
+      `${Math.min(100,worldDone(key)/w.phases*100)}%`;
+
+    grid.appendChild(b);
+  });
+
+  const totalBar = $("homeTotalBar");
+
+  if(totalBar){
+    totalBar.style.width =
+      `${Math.min(100,totalDone()/TOTAL_PHASES*100)}%`;
+  }
+}
 
 function show(id){
   ["homeScreen","gameScreen","completeScreen"].forEach(x => {
     $(x).classList.toggle("hidden",x !== id);
   });
+
   window.scrollTo(0,0);
 }
 
@@ -295,7 +651,9 @@ function chooseWords(){
 
   state.used[currentWorld] = state.used[currentWorld] || [];
 
-  let available = pool.filter(w => !state.used[currentWorld].includes(w));
+  let available = pool.filter(
+    w => !state.used[currentWorld].includes(w)
+  );
 
   if(available.length < 5){
     state.used[currentWorld] = [];
@@ -315,13 +673,18 @@ function chooseWords(){
 }
 
 function tryBoard(words){
-  const g = Array.from({length:N},() => Array(N).fill(""));
+  const g = Array.from(
+    {length:N},
+    () => Array(N).fill("")
+  );
 
   for(const word of [...words].sort((a,b) => b.length-a.length)){
     let placed = false;
 
     for(let t=0;t<300 && !placed;t++){
-      const [dr,dc] = DIRS[Math.floor(Math.random()*DIRS.length)];
+      const [dr,dc] = DIRS[
+        Math.floor(Math.random()*DIRS.length)
+      ];
 
       const r = Math.floor(Math.random()*N);
       const c = Math.floor(Math.random()*N);
@@ -346,6 +709,7 @@ function tryBoard(words){
         for(let i=0;i<word.length;i++){
           g[r+dr*i][c+dc*i] = word[i];
         }
+
         placed = true;
       }
     }
@@ -372,7 +736,9 @@ function makeBoard(words){
   for(let r=0;r<N;r++){
     for(let c=0;c<N;c++){
       if(!g[r][c]){
-        g[r][c] = letters[Math.floor(Math.random()*letters.length)];
+        g[r][c] = letters[
+          Math.floor(Math.random()*letters.length)
+        ];
       }
     }
   }
@@ -388,10 +754,17 @@ function newLevel(){
 
   board = makeBoard(currentWords);
 
-  $("worldEyebrow").textContent = "MUNDO " + WORLDS[currentWorld].name.toUpperCase();
+  $("worldEyebrow").textContent =
+    "MUNDO " + WORLDS[currentWorld].name.toUpperCase();
+
   $("levelTitle").textContent = "Fase " + currentLevel;
-  $("levelCounter").textContent = `Fase ${currentLevel} de ${WORLDS[currentWorld].phases}`;
-  $("foundCounter").textContent = `0/${currentWords.length} palavras`;
+
+  $("levelCounter").textContent =
+    `Fase ${currentLevel} de ${WORLDS[currentWorld].phases}`;
+
+  $("foundCounter").textContent =
+    `0/${currentWords.length} palavras`;
+
   $("levelProgress").style.width = "0%";
   $("message").textContent = "";
 
@@ -405,8 +778,12 @@ function renderWords(){
 
   currentWords.forEach(w => {
     const el = document.createElement("span");
-    el.className = "word-chip" + (found.includes(w) ? " found" : "");
+
+    el.className =
+      "word-chip" + (found.includes(w) ? " found" : "");
+
     el.textContent = w;
+
     $("wordList").append(el);
   });
 }
@@ -423,7 +800,11 @@ function renderBoard(){
       b.textContent = letter;
       b.dataset.r = r;
       b.dataset.c = c;
-      b.setAttribute("aria-label",`linha ${r+1}, coluna ${c+1}, ${letter}`);
+
+      b.setAttribute(
+        "aria-label",
+        `linha ${r+1}, coluna ${c+1}, ${letter}`
+      );
 
       grid.append(b);
     });
@@ -433,13 +814,19 @@ function renderBoard(){
 }
 
 function cellEl(r,c){
-  return document.querySelector(`.cell[data-r="${r}"][data-c="${c}"]`);
+  return document.querySelector(
+    `.cell[data-r="${r}"][data-c="${c}"]`
+  );
 }
 
 function paintAll(){
   document.querySelectorAll(".cell").forEach(el => {
     const key = el.dataset.r + "," + el.dataset.c;
-    el.classList.toggle("found",foundCells.has(key));
+
+    el.classList.toggle(
+      "found",
+      foundCells.has(key)
+    );
   });
 }
 
@@ -450,12 +837,16 @@ function paintSelection(){
 
   selection.forEach(p => {
     const el = cellEl(p.r,p.c);
+
     if(el) el.classList.add("selected");
   });
 }
 
 function coords(el){
-  return {r:+el.dataset.r,c:+el.dataset.c};
+  return {
+    r:+el.dataset.r,
+    c:+el.dataset.c
+  };
 }
 
 function lineCells(a,b){
@@ -478,11 +869,15 @@ function lineCells(a,b){
 
 function cellAt(e){
   const el = document.elementFromPoint(e.clientX,e.clientY);
-  return el && el.closest ? el.closest(".cell") : null;
+
+  return el && el.closest
+    ? el.closest(".cell")
+    : null;
 }
 
 function startSelect(e){
   const cell = e.target.closest(".cell");
+
   if(!cell) return;
 
   pointerDown = true;
@@ -496,6 +891,7 @@ function moveSelect(e){
   if(!pointerDown) return;
 
   const cell = cellAt(e);
+
   if(!cell) return;
 
   const cells = lineCells(selection[0],coords(cell));
@@ -511,7 +907,10 @@ function endSelect(){
 
   pointerDown = false;
 
-  const word = selection.map(p => board[p.r][p.c]).join("");
+  const word = selection.map(
+    p => board[p.r][p.c]
+  ).join("");
+
   const rev = word.split("").reverse().join("");
 
   const match = currentWords.find(
@@ -525,13 +924,17 @@ function endSelect(){
       foundCells.add(p.r+","+p.c);
     });
 
-    $("message").textContent = `Muito bem! ${match} encontrada!`;
+    $("message").textContent =
+      `Muito bem! ${match} encontrada!`;
 
     renderWords();
     paintAll();
 
-    $("foundCounter").textContent = `${found.length}/${currentWords.length} palavras`;
-    $("levelProgress").style.width = `${found.length/currentWords.length*100}%`;
+    $("foundCounter").textContent =
+      `${found.length}/${currentWords.length} palavras`;
+
+    $("levelProgress").style.width =
+      `${found.length/currentWords.length*100}%`;
 
     if(found.length===currentWords.length){
       setTimeout(completeLevel,600);
@@ -558,7 +961,10 @@ function completeLevel(){
     state.coins += 50;
   }
 
-  state.levels[currentWorld] = Math.min(currentLevel+1,WORLDS[currentWorld].phases);
+  state.levels[currentWorld] = Math.min(
+    currentLevel+1,
+    WORLDS[currentWorld].phases
+  );
 
   save();
   show("completeScreen");
@@ -566,12 +972,17 @@ function completeLevel(){
 
 function nextLevel(){
   if(currentLevel>=WORLDS[currentWorld].phases){
-    notice("Mundo concluído!","Parabéns! Você terminou todas as fases deste mundo.");
+    notice(
+      "Mundo concluído!",
+      "Parabéns! Você terminou todas as fases deste mundo."
+    );
+
     show("homeScreen");
     return;
   }
 
   currentLevel++;
+
   state.levels[currentWorld] = currentLevel;
 
   newLevel();
@@ -583,8 +994,11 @@ function nextLevel(){
 function notice(title,msg,okText,action){
   $("dialogTitle").textContent = title;
   $("dialogText").textContent = msg;
+
   $("dialogOk").textContent = okText || "Entendi";
+
   dialogAction = action || null;
+
   $("noticeDialog").showModal();
 }
 
@@ -593,7 +1007,9 @@ function closeNotice(){
 }
 
 function spendOrAd(action){
-  const name = action==="skip" ? "pular esta fase" : "receber uma dica";
+  const name = action==="skip"
+    ? "pular esta fase"
+    : "receber uma dica";
 
   if(state.coins>=500){
 
@@ -630,12 +1046,18 @@ function skipLevel(){
 
   if(currentLevel>=WORLDS[currentWorld].phases){
     save();
-    notice("Mundo concluído!","Parabéns! Você terminou todas as fases deste mundo.");
+
+    notice(
+      "Mundo concluído!",
+      "Parabéns! Você terminou todas as fases deste mundo."
+    );
+
     show("homeScreen");
     return;
   }
 
   currentLevel++;
+
   state.levels[currentWorld] = currentLevel;
 
   newLevel();
@@ -652,8 +1074,13 @@ function findWord(word){
 
         if(er<0 || er>=N || ec<0 || ec>=N) continue;
 
-        if(Array.from(word).every((ch,i)=>board[r+dr*i][c+dc*i]===ch)){
-          return [{r,c},{r:er,c:ec}];
+        if(Array.from(word).every(
+          (ch,i)=>board[r+dr*i][c+dc*i]===ch
+        )){
+          return [
+            {r,c},
+            {r:er,c:ec}
+          ];
         }
       }
     }
@@ -663,7 +1090,9 @@ function findWord(word){
 }
 
 function giveHint(){
-  const remaining = currentWords.filter(w=>!found.includes(w));
+  const remaining = currentWords.filter(
+    w=>!found.includes(w)
+  );
 
   if(!remaining.length) return;
 
@@ -676,10 +1105,12 @@ function giveHint(){
 
   cells.forEach(p=>{
     const el = cellEl(p.r,p.c);
+
     if(el) el.classList.add("hint");
   });
 
-  $("message").textContent = `Dica: a palavra ${target} está destacada em azul.`;
+  $("message").textContent =
+    `Dica: a palavra ${target} está destacada em azul.`;
 
   setTimeout(()=>{
     document.querySelectorAll(".cell.hint").forEach(x=>{
@@ -710,8 +1141,13 @@ $("completeHomeButton").onclick = ()=>{
 
 $("nextButton").onclick = nextLevel;
 
-$("hintButton").onclick = ()=>{ spendOrAd("hint"); };
-$("skipButton").onclick = ()=>{ spendOrAd("skip"); };
+$("hintButton").onclick = ()=>{
+  spendOrAd("hint");
+};
+
+$("skipButton").onclick = ()=>{
+  spendOrAd("skip");
+};
 
 $("closeDialog").onclick = closeNotice;
 
@@ -724,10 +1160,12 @@ $("dialogOk").onclick = ()=>{
   if(a) a();
 };
 
-/* Loja, configurações, menu e tela de mundos: ver menu-novo.js */
+/* REMOVIDO: os botões da loja (+) e engrenagem agora são ligados
+   dentro do menu-novo.js, depois que o menu é criado.
+   O updateHud() final também foi removido: o menu-novo.js chama no fim. */
 </script>
 
-<!-- CARREGA O MENU DEPOIS DA LÓGICA DO JOGO -->
+<!-- CARREGA O MENU DEPOIS DA LÓGICA ORIGINAL -->
 <script src="menu-novo.js"></script>
 
 </body>
