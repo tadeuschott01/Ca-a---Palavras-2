@@ -306,7 +306,7 @@ dialog::backdrop{background:#0009}
 
 <main id="app">
 
-  <!-- MENU PRINCIPAL (preenchido pelo menu-novo.js) -->
+  <!-- NOVO MENU PREMIUM -->
   <section
     id="homeScreen"
     class="screen home-screen"
@@ -487,6 +487,10 @@ const WORLDS = {
 
 const ORDER = ["natureza","lunar","magico","mar","ceu"];
 const TOTAL_PHASES = 630;
+
+// MODO DE TESTE: true libera todos os mundos sem apagar o progresso.
+// Quando terminar de testar, troque para false.
+window.TESTE_LIBERADO = true;
 const STORAGE = "cacaPalavrasSaveV2";
 const N = 10;
 
@@ -551,7 +555,6 @@ function worldDone(key){
   ).length;
 }
 
-/* CORRIGIDO: não quebra se o menu ainda não foi criado */
 function updateHud(){
   const homeCoins = $("homeCoins");
   const gameCoins = $("gameCoins");
@@ -561,14 +564,12 @@ function updateHud(){
   if(gameCoins) gameCoins.textContent = state.coins;
 
   if(homeProgress){
-    homeProgress.textContent =
-      `${totalDone()}/${TOTAL_PHASES} fases`;
+    homeProgress.textContent = `${totalDone()}/${TOTAL_PHASES} fases`;
   }
 
   renderWorlds();
 }
 
-/* (o menu-novo.js substitui esta função pela versão nova) */
 function renderWorlds(){
   const grid = $("worldGrid");
   if(!grid) return;
@@ -577,7 +578,7 @@ function renderWorlds(){
 
   ORDER.forEach(key => {
     const w = WORLDS[key];
-    const locked = totalDone() < w.start;
+    const locked = !window.TESTE_LIBERADO && totalDone() < w.start;
 
     const b = document.createElement("button");
 
@@ -621,7 +622,7 @@ function show(id){
 function openWorld(key){
   const w = WORLDS[key];
 
-  if(totalDone() < w.start){
+  if(!window.TESTE_LIBERADO && totalDone() < w.start){
     notice(
       "Mundo bloqueado",
       `Complete ${w.start-totalDone()} fase(s) a mais nos mundos anteriores para desbloquear o Mundo ${w.name}.`
@@ -630,7 +631,12 @@ function openWorld(key){
   }
 
   currentWorld = key;
-  currentLevel = Math.min(state.levels[key] || 1,w.phases);
+  currentLevel = window.TESTE_LIBERADO
+    ? 1
+    : Math.min(state.levels[key] || 1, w.phases);
+
+  $("gameScreen").className = "screen game-screen world-" + key;
+  $("completeScreen").className = "screen complete-screen hidden world-" + key;
 
   newLevel();
   show("gameScreen");
@@ -1160,12 +1166,10 @@ $("dialogOk").onclick = ()=>{
   if(a) a();
 };
 
-/* REMOVIDO: os botões da loja (+) e engrenagem agora são ligados
-   dentro do menu-novo.js, depois que o menu é criado.
-   O updateHud() final também foi removido: o menu-novo.js chama no fim. */
+updateHud();
 </script>
 
-<!-- CARREGA O MENU DEPOIS DA LÓGICA ORIGINAL -->
+<!-- CARREGA O NOVO MENU DEPOIS DA LÓGICA ORIGINAL -->
 <script src="menu-novo.js"></script>
 
 </body>
