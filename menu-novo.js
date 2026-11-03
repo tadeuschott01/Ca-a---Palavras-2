@@ -1,6 +1,4 @@
-/* MENU PREMIUM — CAÇA-PALAVRAS
-   Mantém moedas, progresso e desbloqueio dos mundos.
-*/
+/* MENU PREMIUM — CAÇA-PALAVRAS (com imagens) */
 
 (function () {
   "use strict";
@@ -10,38 +8,28 @@
 
   if (!home) return;
 
-  // Cria o novo menu
+  // Imagem de cada mundo (nomes iguais aos do repositório)
+  const IMAGES = {
+    natureza: "natureza.png",
+    lunar: "lunar.png",
+    magico: "magico.png",
+    mar: "fundo-do-mar.png",
+    ceu: "ceu.png"
+  };
+
   home.innerHTML = `
     <div class="mn-scene">
-
-      <div class="mn-cloud mn-c1" aria-hidden="true"></div>
-      <div class="mn-cloud mn-c2" aria-hidden="true"></div>
-
       <div class="mn-wrap">
 
         <header class="mn-top">
 
           <div class="mn-coins">
             <span class="mn-coin" aria-hidden="true">$</span>
-
             <strong id="homeCoins">150</strong>
-
-            <button
-              class="mn-plus"
-              id="shopButton"
-              type="button"
-              aria-label="Comprar moedas">
-              +
-            </button>
+            <button class="mn-plus" id="shopButton" type="button" aria-label="Comprar moedas">+</button>
           </div>
 
-          <button
-            class="mn-gear"
-            id="settingsButton"
-            type="button"
-            aria-label="Configurações">
-            ⚙
-          </button>
+          <button class="mn-gear" id="settingsButton" type="button" aria-label="Configurações">⚙</button>
 
         </header>
 
@@ -50,27 +38,17 @@
           <p>Escolha um mundo para jogar!</p>
         </div>
 
-        <div
-          id="worldGrid"
-          class="mn-worlds"
-          aria-label="Escolha um mundo">
-        </div>
+        <div id="worldGrid" class="mn-worlds" aria-label="Escolha um mundo"></div>
 
         <footer class="mn-foot">
-
           <div id="homeProgress">0/630 fases</div>
-
-          <div class="mn-total">
-            <i id="homeTotalBar" style="width:0%"></i>
-          </div>
-
+          <div class="mn-total"><i id="homeTotalBar" style="width:0%"></i></div>
         </footer>
 
       </div>
     </div>
   `;
 
-  // Botões do topo (agora existem, então os eventos funcionam)
   byId("shopButton").addEventListener("click", function () {
     notice(
       "Loja de moedas",
@@ -85,67 +63,48 @@
     );
   });
 
-  // Renderiza os mundos
   window.renderWorlds = function renderWorlds() {
 
     const grid = byId("worldGrid");
 
-    if (!grid || typeof WORLDS === "undefined") {
-      return;
-    }
+    if (!grid || typeof WORLDS === "undefined") return;
 
     grid.innerHTML = "";
 
     ORDER.forEach(key => {
 
       const world = WORLDS[key];
-
-      const missing = Math.max(
-        0,
-        world.start - totalDone()
-      );
-
+      const missing = Math.max(0, world.start - totalDone());
       const locked = missing > 0;
       const done = worldDone(key);
 
       const card = document.createElement("button");
 
       card.type = "button";
-
-      card.className =
-        `mn-card w-${key}` +
-        (locked ? " locked" : "");
+      card.className = `mn-card w-${key}` + (locked ? " locked" : "");
 
       card.setAttribute(
         "aria-label",
         `Mundo ${world.name}, ${done} de ${world.phases} fases` +
-        (locked
-          ? `, bloqueado, faltam ${missing}`
-          : ", jogar")
+        (locked ? `, bloqueado, faltam ${missing}` : ", jogar")
       );
 
       card.innerHTML = `
-        <div class="mn-art" aria-hidden="true">
-          ${world.emoji}
-        </div>
+        <div class="mn-art" aria-hidden="true"></div>
 
         <div class="mn-info">
-
           <strong></strong>
-
           <small></small>
-
-          <div class="mn-bar">
-            <i></i>
-          </div>
-
+          <div class="mn-bar"><i></i></div>
         </div>
 
         <span class="mn-go"></span>
       `;
 
-      card.querySelector(".mn-info strong").textContent =
-        world.name;
+      card.querySelector(".mn-art").style.backgroundImage =
+        `url("${IMAGES[key]}")`;
+
+      card.querySelector(".mn-info strong").textContent = world.name;
 
       card.querySelector(".mn-info small").textContent =
         `${done}/${world.phases} fases`;
@@ -164,7 +123,6 @@
 
     });
 
-    // Barra geral de progresso
     const totalBar = byId("homeTotalBar");
 
     if (totalBar) {
@@ -174,7 +132,6 @@
 
   };
 
-  // Atualiza moedas, progresso e mundos
   if (typeof updateHud === "function") {
     updateHud();
   } else {
