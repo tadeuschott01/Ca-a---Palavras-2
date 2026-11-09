@@ -93,7 +93,9 @@
   };
 
   byId("settingsButton").onclick = function () {
-    if (typeof notice === "function") {
+    if (typeof openSettings === "function") {
+      openSettings();
+    } else if (typeof notice === "function") {
       notice("Configurações", "Seu progresso e suas moedas ficam salvos neste navegador.");
     }
   };
