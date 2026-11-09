@@ -335,6 +335,90 @@ dialog::backdrop{background:#0009}
   .word-chip{font-size:12px}
   .cell{border-radius:4px}
 }
+
+/* BARRA DO MODO (jogador + modo grande/normal) */
+.mode-bar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:8px;
+  max-width:460px;
+  margin:0 auto 8px
+}
+.player-tag{
+  min-width:0;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  font-size:13px;
+  font-weight:900;
+  color:#603715
+}
+.mode-button{
+  flex:none;
+  border:2px solid #f2c16b;
+  border-radius:12px;
+  padding:7px 12px;
+  font-size:13px;
+  font-weight:900;
+  color:#fff;
+  white-space:nowrap;
+  background:linear-gradient(#3b8fd0,#15527f);
+  box-shadow:0 3px 0 #572d12
+}
+
+/* MODO GRANDE: tabuleiro ocupa a tela toda, letras maiores */
+body.big-mode #gameScreen{padding:10px 6px 24px}
+body.big-mode #gameScreen .game-header,
+body.big-mode #gameScreen .game-content{max-width:min(100%,720px)}
+body.big-mode #gameScreen .game-content{padding:8px 5px;border-width:4px}
+body.big-mode #gameScreen .instruction{display:none}
+body.big-mode #gameScreen .mode-bar{max-width:none;padding:0 4px}
+body.big-mode #gameScreen .letter-grid{max-width:none;gap:2px}
+body.big-mode #gameScreen .cell{
+  font-size:clamp(20px,6.6vw,40px);
+  border-radius:5px
+}
+
+/* LOGIN POR NOME */
+.name-input{
+  width:100%;
+  margin-top:6px;
+  padding:13px 14px;
+  border:3px solid #b57b35;
+  border-radius:14px;
+  font:inherit;
+  font-size:18px;
+  font-weight:800;
+  text-align:center;
+  color:#45260f;
+  background:#fff9e9
+}
+.name-input:focus{outline:3px solid #ffd34e}
+.login-error{
+  min-height:18px;
+  margin:8px 0 0;
+  font-size:14px;
+  font-weight:800;
+  color:#a5281b
+}
+.player-label{margin:14px 0 0;font-size:13px;font-weight:800}
+.player-list{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:6px;
+  margin-top:8px
+}
+.player-chip{
+  border:2px solid #b57b35;
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:13px;
+  font-weight:900;
+  color:#45260f;
+  background:#f8df9c
+}
 </style>
 </head>
 
@@ -388,6 +472,17 @@ dialog::backdrop{background:#0009}
       </p>
 
       <div id="wordList" class="word-list"></div>
+
+      <div class="mode-bar">
+        <span class="player-tag" id="playerTag"></span>
+        <button
+          type="button"
+          class="mode-button"
+          id="modeButton"
+          aria-pressed="false">
+          🔍 Modo grande
+        </button>
+      </div>
 
       <div
         id="letterGrid"
@@ -519,6 +614,69 @@ dialog::backdrop{background:#0009}
   </div>
 </dialog>
 
+<!-- LOGIN: SÓ O NOME -->
+<dialog id="loginDialog">
+  <div class="dialog-inner">
+
+    <div class="trophy" style="font-size:48px">🎮</div>
+
+    <h2>Quem vai jogar?</h2>
+
+    <p>Digite seu nome para salvar o seu progresso.</p>
+
+    <form id="loginForm" autocomplete="off">
+      <input
+        class="name-input"
+        id="nameInput"
+        type="text"
+        maxlength="20"
+        placeholder="Seu nome"
+        aria-label="Seu nome"
+        autocomplete="off"
+        autofocus>
+
+      <p class="login-error" id="loginError" role="alert"></p>
+
+      <button class="primary-button" type="submit">Entrar</button>
+      <button class="secondary-button hidden" type="button" id="loginCancel">
+        Cancelar
+      </button>
+    </form>
+
+    <p class="player-label hidden" id="playerLabel">Já jogaram aqui:</p>
+    <div class="player-list" id="playerList"></div>
+
+  </div>
+</dialog>
+
+<!-- CONFIGURAÇÕES -->
+<dialog id="settingsDialog">
+  <div class="dialog-inner">
+
+    <button
+      class="dialog-close"
+      id="settingsClose"
+      aria-label="Fechar">
+      ×
+    </button>
+
+    <h2>Configurações</h2>
+
+    <p>Jogador: <strong id="settingsName"></strong></p>
+
+    <p>Seu progresso e suas moedas ficam salvos neste navegador, com o seu nome.</p>
+
+    <button class="secondary-button" type="button" id="switchPlayer">
+      🔄 Trocar jogador
+    </button>
+
+    <button class="primary-button" type="button" id="settingsOk">
+      Fechar
+    </button>
+
+  </div>
+</dialog>
+
 <script>
 const toList = s => s.split(",").map(x =>
   x.trim().toUpperCase().replaceAll(" ", "")
@@ -599,21 +757,29 @@ const defaultState = () => ({
     ceu:1
   },
   completed:{},
-  used:{}
+  used:{},
+  bigMode:false,
+  name:""
 });
 
-function loadState(){
+/* O progresso fica salvo por jogador: STORAGE + ":" + nome normalizado. */
+const PLAYERS_KEY = "cacaPalavrasJogadores";
+const LAST_KEY = "cacaPalavrasUltimoJogador";
+
+let playerKey = null;
+
+function readPlayer(key){
   try{
-    const s = JSON.parse(localStorage.getItem(STORAGE));
+    const s = JSON.parse(localStorage.getItem(STORAGE + ":" + key));
     if(s && typeof s.coins === "number"){
       return Object.assign(defaultState(),s);
     }
   }catch(e){}
 
-  return defaultState();
+  return null;
 }
 
-const state = loadState();
+const state = defaultState();
 
 let currentWorld = "natureza";
 let currentLevel = 1;
@@ -626,9 +792,14 @@ let pointerDown = false;
 let dialogAction = null;
 
 function save(){
-  try{
-    localStorage.setItem(STORAGE,JSON.stringify(state));
-  }catch(e){}
+  if(playerKey){
+    try{
+      localStorage.setItem(
+        STORAGE + ":" + playerKey,
+        JSON.stringify(state)
+      );
+    }catch(e){}
+  }
 
   updateHud();
 }
@@ -1350,11 +1521,190 @@ $("dialogOk").onclick = ()=>{
   if(a) a();
 };
 
+/* MODO GRANDE / NORMAL */
+
+function applyMode(){
+  const big = !!state.bigMode;
+
+  document.body.classList.toggle("big-mode",big);
+
+  const b = $("modeButton");
+
+  b.textContent = big ? "🔎 Modo normal" : "🔍 Modo grande";
+  b.setAttribute("aria-pressed",String(big));
+}
+
+$("modeButton").onclick = ()=>{
+  state.bigMode = !state.bigMode;
+
+  applyMode();
+  save();
+};
+
+/* LOGIN SÓ COM O NOME */
+
+function normName(n){
+  return n.normalize("NFD")
+    .replace(/[̀-ͯ]/g,"")
+    .toLowerCase()
+    .replace(/\s+/g," ")
+    .trim();
+}
+
+function cleanName(n){
+  return n.replace(/\s+/g," ").trim().slice(0,20);
+}
+
+function getPlayers(){
+  try{
+    const l = JSON.parse(localStorage.getItem(PLAYERS_KEY));
+    return Array.isArray(l) ? l : [];
+  }catch(e){
+    return [];
+  }
+}
+
+function rememberPlayer(name){
+  const list = getPlayers().filter(
+    n => normName(n) !== normName(name)
+  );
+
+  list.unshift(name);
+
+  try{
+    localStorage.setItem(PLAYERS_KEY,JSON.stringify(list.slice(0,8)));
+  }catch(e){}
+}
+
+function login(rawName){
+  const name = cleanName(rawName);
+  const key = normName(name);
+
+  if(!key) return false;
+
+  let data = readPlayer(key);
+
+  if(!data){
+    data = defaultState();
+
+    /* O primeiro jogador herda o progresso salvo antes do login existir. */
+    if(getPlayers().length === 0){
+      try{
+        const old = JSON.parse(localStorage.getItem(STORAGE));
+
+        if(old && typeof old.coins === "number"){
+          data = Object.assign(defaultState(),old);
+        }
+      }catch(e){}
+    }
+  }
+
+  const display = data.name || name;
+
+  Object.keys(state).forEach(k => delete state[k]);
+  Object.assign(state,data);
+
+  state.name = display;
+  playerKey = key;
+
+  try{
+    localStorage.setItem(LAST_KEY,key);
+  }catch(e){}
+
+  rememberPlayer(display);
+
+  $("playerTag").textContent = "👤 " + display;
+
+  applyMode();
+  save();
+  show("homeScreen");
+
+  return true;
+}
+
+function openLogin(){
+  const box = $("playerList");
+  const list = getPlayers();
+
+  $("loginError").textContent = "";
+  $("nameInput").value = "";
+
+  box.innerHTML = "";
+
+  list.forEach(n => {
+    const b = document.createElement("button");
+
+    b.type = "button";
+    b.className = "player-chip";
+    b.textContent = n;
+
+    b.onclick = () => {
+      login(n);
+      $("loginDialog").close();
+    };
+
+    box.append(b);
+  });
+
+  $("playerLabel").classList.toggle("hidden",list.length === 0);
+  $("loginCancel").classList.toggle("hidden",!playerKey);
+
+  if(!$("loginDialog").open) $("loginDialog").showModal();
+}
+
+function openSettings(){
+  $("settingsName").textContent = state.name || "";
+  $("settingsDialog").showModal();
+}
+
+$("loginForm").addEventListener("submit",e=>{
+  e.preventDefault();
+
+  if(!normName($("nameInput").value)){
+    $("loginError").textContent = "Digite seu nome para entrar.";
+    return;
+  }
+
+  login($("nameInput").value);
+  $("loginDialog").close();
+});
+
+$("loginCancel").onclick = ()=> $("loginDialog").close();
+
+/* Sem jogador escolhido, não dá para fechar a tela de login. */
+$("loginDialog").addEventListener("cancel",e=>{
+  if(!playerKey) e.preventDefault();
+});
+
+$("loginDialog").addEventListener("close",()=>{
+  if(!playerKey) setTimeout(openLogin,0);
+});
+
+$("settingsClose").onclick = ()=> $("settingsDialog").close();
+$("settingsOk").onclick = ()=> $("settingsDialog").close();
+
+$("switchPlayer").onclick = ()=>{
+  $("settingsDialog").close();
+  openLogin();
+};
+
+function initLogin(){
+  const last = localStorage.getItem(LAST_KEY);
+  const data = last ? readPlayer(last) : null;
+
+  if(data && data.name){
+    login(data.name);
+  }else{
+    openLogin();
+  }
+}
+
 updateHud();
+initLogin();
 </script>
 
 <!-- CARREGA O NOVO MENU DEPOIS DA LÓGICA ORIGINAL -->
-<script src="menu-novo.js?v=3"></script>
+<script src="menu-novo.js?v=4"></script>
 
 </body>
 </html>
